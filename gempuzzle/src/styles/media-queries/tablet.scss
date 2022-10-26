@@ -1,0 +1,26 @@
+@import '../vars/_vars';
+
+@media screen and (min-width: 768px) {
+    .wrapper {
+        width: 70%;
+    }
+
+    main {
+        overflow: scroll;
+        .wrapper {
+            padding: 4rem 0;
+            .game-field {
+                width: 40vh;
+                height: 40vh;
+            }
+        }
+    }
+    .popup {
+        width: 30vw;
+        height: 30vw;
+    }
+    .settings__text {
+        display: block;
+    }
+
+}
