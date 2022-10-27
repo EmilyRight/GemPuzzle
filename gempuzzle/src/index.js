@@ -375,9 +375,9 @@ function startGame(cellsNumber) {
   let gameMatrix = createMatrix(shuffledArr, Math.sqrt(cellsNumber));
   let solvable = checkMatrixIsSolvable(gameMatrix);
   while (!solvable) {
-    solvable = checkMatrixIsSolvable(gameMatrix);
     shuffledArr = shuffle(shuffledArr);
     gameMatrix = createMatrix(shuffledArr, Math.sqrt(cellsNumber));
+    solvable = checkMatrixIsSolvable(gameMatrix);
   }
   return gameMatrix;
 }
