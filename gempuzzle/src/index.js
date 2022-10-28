@@ -42,6 +42,8 @@ let isRunning = false;
 let firstGame = false;
 let stepsNum = 0;
 let soundIsOn = true;
+// let cellsNumber = 0;
+// let gameCells = [];
 let matrix = [];
 let gameHours = '';
 let gameMinutes = '';
@@ -105,12 +107,14 @@ const fillBestTable = () => {
 };
 
 const openBestScoreTable = () => {
+  fillBestTable();
   bestResultsPopUp.classList.add('opened');
   closeMenu();
 };
 
 const closeBestScoreTable = () => {
   bestResultsPopUp.classList.remove('opened');
+  setBestScore();
 };
 
 const shuffle = (arr) => {
@@ -168,6 +172,7 @@ function checkMatrixIsSolvable(matr) {
   const arr = matr.flat();
   const cellsNumber = arr.length;
   const emptyRow = findCoords(cellsNumber, matr);
+  console.log(emptyRow);
   for (let i = 0; i < arr.length; i++) {
     for (let j = arr.length; j > i; j--) {
       if (arr[j] < arr[i] && arr[i] !== arr.length) {
@@ -315,14 +320,19 @@ const showResult = (matr, array) => {
 
 const setBestScore = () => {
   wish.innerHTML = bestScore.wish;
-  const localBest = localStorage.getItem(`${matrix.length}`);
+  const rows = matrix.length;
+  const localBest = localStorage.getItem(`${rows}`);
+  if (!localBest) bestScoreBlock.innerHTML = '';
+  console.log(localBest, matrix.length);
   if (localBest) {
     if (stepsNum < localBest && stepsNum > 0) {
       localStorage.setItem(`${matrix.length}`, stepsNum);
+      bestScoreBlock.innerHTML = `Best score for ${rows} x ${rows} is ${stepsNum}`;
     }
-  } else {
-    localStorage.setItem(`${matrix.length}`, stepsNum);
+  } else if (!localBest && stepsNum > 0) {
+    localStorage.setItem(`${rows}`, stepsNum);
   }
+  // bestScoreBlock.innerHTML = `Best score for ${rows} x ${rows} is ${stepsNum}`;
 };
 
 function swap(coords1, coords2, matr) {
@@ -338,8 +348,8 @@ function swap(coords1, coords2, matr) {
       isRunning = false;
       clearInterval(timerActive);
       saveTimeCounter();
-      openPopUp();
       setBestScore();
+      openPopUp();
     }
   }
 }
@@ -378,6 +388,7 @@ function startGame(cellsNumber) {
     shuffledArr = shuffle(shuffledArr);
     gameMatrix = createMatrix(shuffledArr, Math.sqrt(cellsNumber));
     solvable = checkMatrixIsSolvable(gameMatrix);
+    console.log(gameMatrix);
   }
   return gameMatrix;
 }
@@ -417,14 +428,9 @@ gameLvls.forEach((btn) => {
     matrix = startGame(cellsNumber);
     setPositionItems(matrix);
     startGameByMove();
-    if (localStorage.getItem(`${rows}`)) {
-      const result = localStorage.getItem(`${rows}`);
-      bestScoreBlock.innerHTML = `Best score for ${rows} x ${rows} is ${result}`;
-    } else {
-      bestScoreBlock.innerHTML = '';
-    }
     clearInterval(timerActive);
     stopTimeCounter();
+    setBestScore();
   });
 });
 
@@ -578,6 +584,7 @@ window.onload = function () {
   if (localStorage.getItem(`${cellsNumber}`)) {
     playSaveBtn.style.display = 'block';
   }
+  setBestScore();
 };
 
 bestResultsBtn.addEventListener('click', openBestScoreTable);
