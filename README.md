@@ -1,6 +1,6 @@
 https://emilyright.github.io/GemPuzzle/gempuzzle/public/
 ![image](https://user-images.githubusercontent.com/76948537/198102820-2820201f-1e46-4f18-b3a6-423f07a1540b.png)
-mpm i;
+npm i;
 npm run build;
 npm start;
 
